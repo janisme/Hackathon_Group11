@@ -72,3 +72,14 @@ class Map(models.Model):
         on_delete=models.CASCADE,
         related_name='maps'
     )
+    
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    email = models.EmailField()
+    city = models.CharField(max_length=50)
+    notifications = models.BooleanField()
+    issuesaddressed = models.IntegerField()
+    badges = models.ImageField()
+
+    def __str__(self):
+        return self.user.username
