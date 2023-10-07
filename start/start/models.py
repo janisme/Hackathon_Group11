@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 class UserType(models.TextChoices):
     POSTER = 'poster', 'Poster'
@@ -52,6 +53,8 @@ class IssueLog(models.Model):
         choices=UserType.choices,
         default=UserType.POSTER
     )
+
+    created_at = models.DateTimeField(default=timezone.now)
 
 class Likes(models.Model):
     Liking = models.BooleanField()
