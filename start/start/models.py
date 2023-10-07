@@ -78,8 +78,18 @@ class Profile(models.Model):
     email = models.EmailField()
     city = models.CharField(max_length=50)
     notifications = models.BooleanField()
-    issuesaddressed = models.IntegerField()
     badges = models.ImageField()
+
+    @property
+    def issuesaddressed_percentage(self):
+        total_issues_in_city = IssueLog.objects.filter(zipcode=self.city).count()
+        issues_addressed_by_user = IssueLog.objects.filter(username=self.user.username).count()
+
+        if total_issues_in_city == 0:
+            return 0  # Avoid division by zero
+
+        percentage = (issues_addressed_by_user / total_issues_in_city) * 100
+        return percentage
 
     def __str__(self):
         return self.user.username
