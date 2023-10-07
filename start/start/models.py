@@ -28,7 +28,7 @@ class Event(models.Model):
 
 class IssueLog(models.Model):
     username = models.CharField(max_length=50)
-    issue_id = models.CharField(max_length=6)
+    issue_id = models.CharField(max_length=26)
     longitude = models.FloatField()
     latitude = models.FloatField()
     city = models.CharField(max_length=20)
