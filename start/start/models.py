@@ -1,5 +1,8 @@
 from django.db import models
 
+class UserType(models.TextChoices):
+    POSTER = 'poster', 'Poster'
+    SOLVER = 'solver', 'Solver'
 
 class ProblemType(models.TextChoices):
     CLIMATE_CHANGE = 'Climate Change', 'Climate Change'
@@ -11,6 +14,16 @@ class ProblemType(models.TextChoices):
     OVERFISHING = 'Overfishing', 'Overfishing'
     RESOURCE_DEPLETION = 'Resource Depletion', 'Resource Depletion'
 
+class Event(models.Model):
+    typeofproblem = models.CharField(
+        max_length=100,
+        choices=ProblemType.choices,
+        default=ProblemType.CLIMATE_CHANGE
+    )
+
+    location = models.CharField(max_length=50)
+    time = models.TimeField()
+    date = models.DateField()
 
 class IssueLog(models.Model):
     username = models.CharField(max_length=50)
@@ -20,38 +33,32 @@ class IssueLog(models.Model):
     zipcode = models.IntegerField()
 
     event = models.ForeignKey(
-        'Event',
-        on_delete=models.CASCADE,  # You can choose the appropriate behavior on deletion
+        Event,
+        on_delete=models.CASCADE,
         related_name='issue_logs'
     )
 
-    typeofproblem = models.ForeignKey(
-        ProblemType,
-        on_delete=models.CASCADE,  # You can choose the appropriate behavior on deletion
+    typeofproblem = models.CharField(
+        max_length=100,
+        choices=ProblemType.choices,
+        default=ProblemType.CLIMATE_CHANGE
     )
-
+    
     events = models.CharField(max_length=50)
-
-
-class Event(models.Model):
-    typeofproblem = models.ForeignKey(
-        ProblemType,
-        on_delete=models.CASCADE,  # You can choose the appropriate behavior on deletion
+    
+    usertype = models.CharField(
+        max_length=10,
+        choices=UserType.choices,
+        default=UserType.POSTER
     )
-
-    location = models.CharField(max_length=50)
-    time = models.TimeField()
-    date = models.DateField()
-
 
 class Likes(models.Model):
     Liking = models.BooleanField()
     issue = models.ForeignKey(
         IssueLog,
-        on_delete=models.CASCADE,  # You can choose the appropriate behavior on deletion
+        on_delete=models.CASCADE,
         related_name='likes'
     )
-
 
 class Map(models.Model):
     longitude = models.FloatField()
@@ -64,8 +71,3 @@ class Map(models.Model):
         on_delete=models.CASCADE,
         related_name='maps'
     )
-
-
-
-
-
