@@ -19,33 +19,53 @@ class IssueLog(models.Model):
     latitude = models.FloatField()
     zipcode = models.IntegerField()
 
-    typeofproblem = models.CharField(
-        max_length=100,
-        choices=ProblemType.choices,
-        default=ProblemType.CLIMATE_CHANGE
+    event = models.ForeignKey(
+        'Event',
+        on_delete=models.CASCADE,  # You can choose the appropriate behavior on deletion
+        related_name='issue_logs'
+    )
+
+    typeofproblem = models.ForeignKey(
+        ProblemType,
+        on_delete=models.CASCADE,  # You can choose the appropriate behavior on deletion
     )
 
     events = models.CharField(max_length=50)
 
 
 class Event(models.Model):
-    typeofproblem = models.CharField(
-        max_length=100,
-        choices=ProblemType.choices,
-        default=ProblemType.CLIMATE_CHANGE
+    typeofproblem = models.ForeignKey(
+        ProblemType,
+        on_delete=models.CASCADE,  # You can choose the appropriate behavior on deletion
     )
 
     location = models.CharField(max_length=50)
     time = models.TimeField()
     date = models.DateField()
 
+
 class Likes(models.Model):
     Liking = models.BooleanField()
-    issue_id = models.CharField(max_length=6)
+    issue = models.ForeignKey(
+        IssueLog,
+        on_delete=models.CASCADE,  # You can choose the appropriate behavior on deletion
+        related_name='likes'
+    )
+
 
 class Map(models.Model):
     longitude = models.FloatField()
     latitude = models.FloatField()
     zipcode = models.IntegerField()
     city = models.CharField(max_length=20)
+
+    related_issue = models.ForeignKey(
+        IssueLog,
+        on_delete=models.CASCADE,
+        related_name='maps'
+    )
+
+
+
+
 
