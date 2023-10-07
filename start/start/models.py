@@ -31,7 +31,7 @@ class IssueLog(models.Model):
     issue_id = models.CharField(max_length=6)
     longitude = models.FloatField()
     latitude = models.FloatField()
-    zipcode = models.IntegerField()
+    city = models.CharField(max_length=20)
 
     event = models.ForeignKey(
         Event,
